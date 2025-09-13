@@ -14,24 +14,18 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #7fcdcd85;
+            /* background: linear-gradient(135deg, #a8e6cf 0%, #7fcdcd 50%, #81c784 100%); */
+            background:  #7fcdcd85;
+            min-height: 100vh;
             color: #2c5530;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh; /* Garante que o body ocupe pelo menos a altura da viewport, mas pode crescer */
-            overflow-x: hidden; /* Remove a barra de rolagem horizontal */
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 800px;
-            width: 100%;
+            margin: 0 auto;
             padding: 20px;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         .header {
@@ -79,9 +73,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             animation: slideUp 1s ease-out 0.3s both;
             position: relative;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
         }
 
         .form-container::before {
@@ -101,35 +92,6 @@
             margin-bottom: 30px;
             text-align: center;
             font-weight: 600;
-        }
-
-        .fixed-field {
-            margin-bottom: 30px;
-        }
-
-        .fixed-field label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #2e7d32;
-            font-size: 1.1rem;
-        }
-
-        .fixed-field input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 1rem;
-            color: #2c5530;
-            background: white;
-            transition: all 0.3s ease;
-        }
-
-        .fixed-field input:focus {
-            outline: none;
-            border-color: #4db6ac;
-            box-shadow: 0 0 0 3px rgba(77, 182, 172, 0.1);
         }
 
         .field-selector {
@@ -161,20 +123,6 @@
             border-color: #4db6ac;
             box-shadow: 0 0 0 3px rgba(77, 182, 172, 0.1);
             transform: translateY(-2px);
-        }
-
-        .field-selector option.missing-field {
-            color: #d32f2f !important;
-            font-weight: bold !important;
-            background-color: #ffebee !important;
-            border: 2px solid #d32f2f !important;
-        }
-
-        .field-selector option.completed-field {
-            color: #2e7d32 !important;
-            font-weight: bold !important;
-            background-color: #e8f5e8 !important;
-            border: 2px solid #2e7d32 !important;
         }
 
         .dynamic-field {
@@ -280,6 +228,7 @@
 
         .submit-btn {
             background: #66bb6a;
+            /* background: linear-gradient(45deg, #4db6ac, #66bb6a); */
             color: white;
             border: none;
             padding: 15px 40px;
@@ -300,17 +249,32 @@
             transform: translateY(-1px);
         }
 
-       
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4db6ac, #66bb6a);
+            width: 0%;
+            transition: width 0.6s ease;
+            border-radius: 3px;
+        }
+
         .floating-icons {
             position: absolute;
             top: 20%;
-            right: 0;
+            right: -50px;
             opacity: 0.1;
             font-size: 8rem;
             color: #4db6ac;
             animation: float 6s ease-in-out infinite;
             pointer-events: none;
-            width: 0; /* Evita overflow horizontal */
         }
 
         @keyframes slideDown {
@@ -363,6 +327,7 @@
             
             .form-container {
                 padding: 20px;
+                /* border-radius: 15px; */
             }
             
             .logo {
@@ -389,12 +354,11 @@
         <div class="form-container">
             <h2 class="form-title">Avaliação Personalizada</h2>
             
-            <form id="diagnosticForm">
-                <div class="fixed-field">
-                    <label for="nome">Digite seu Nome:</label>
-                    <input type="text" id="nome" name="nome">
-                </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
 
+            <form id="diagnosticForm">
                 <div class="field-selector">
                     <label for="fieldSelect">
                         <i class="fas fa-list-ul"></i> Selecione um campo para preencher:
@@ -435,7 +399,6 @@
         const validationMessage = document.getElementById('validationMessage');
         const validateBtn = document.getElementById('validateBtn');
         const progressFill = document.getElementById('progressFill');
-        const nomeInput = document.getElementById('nome');
 
         const fieldsData = {
             genero: { label: 'Gênero', type: 'select', options: ['Masculino', 'Feminino', 'Não-binário', 'Prefiro não informar'] },
@@ -453,7 +416,7 @@
         };
 
         const completedFields = {};
-        const totalFields = Object.keys(fieldsData).length + 1; // +1 para o campo nome
+        const totalFields = Object.keys(fieldsData).length;
 
         function updateProgress() {
             const completed = Object.keys(completedFields).length;
@@ -519,11 +482,6 @@
                 fieldDiv.appendChild(input);
             }
 
-            if (completedFields[fieldKey]) {
-                input.value = completedFields[fieldKey];
-                fieldDiv.classList.add('field-completed');
-            }
-
             input.addEventListener('change', function() {
                 if (this.value && this.value.trim() !== '') {
                     completedFields[fieldKey] = this.value;
@@ -538,90 +496,34 @@
             return fieldDiv;
         }
 
-        nomeInput.addEventListener('change', function() {
-            if (this.value && this.value.trim() !== '') {
-                completedFields['nome'] = this.value;
-                this.parentElement.classList.add('field-completed');
-            } else {
-                delete completedFields['nome'];
-                this.parentElement.classList.remove('field-completed');
-            }
-            updateProgress();
-        });
-
         fieldSelect.addEventListener('change', function() {
             const selectedField = this.value;
             
-            dynamicFields.innerHTML = '';
-            
-            if (selectedField) {
+            if (selectedField && !document.getElementById(`field-${selectedField}`)) {
                 const fieldData = fieldsData[selectedField];
                 const fieldElement = createField(selectedField, fieldData);
                 dynamicFields.appendChild(fieldElement);
+                
+                // Reset select to show placeholder
+                setTimeout(() => {
+                    this.value = '';
+                }, 100);
             }
         });
 
-        function updateFieldSelectStyle() {
-            const missingFields = [];
-            const completedFieldsKeys = [];
-            
-            Object.keys(fieldsData).forEach(fieldKey => {
-                if (!completedFields[fieldKey]) {
-                    missingFields.push(fieldKey);
-                } else {
-                    completedFieldsKeys.push(fieldKey);
-                }
-            });
-
-            const options = fieldSelect.querySelectorAll('option');
-            options.forEach(option => {
-                option.classList.remove('missing-field', 'completed-field');
-            });
-
-            missingFields.forEach(fieldKey => {
-                const option = fieldSelect.querySelector(`option[value="${fieldKey}"]`);
-                if (option) {
-                    option.classList.add('missing-field');
-                }
-            });
-
-            completedFieldsKeys.forEach(fieldKey => {
-                const option = fieldSelect.querySelector(`option[value="${fieldKey}"]`);
-                if (option) {
-                    option.classList.add('completed-field');
-                }
-            });
-        }
-
         validateBtn.addEventListener('click', function() {
             const missingFields = [];
-            const missingFieldsLabels = [];
-            
-            if (!completedFields['nome']) {
-                missingFields.push('nome');
-                missingFieldsLabels.push('Nome');
-            }
             
             Object.keys(fieldsData).forEach(fieldKey => {
                 if (!completedFields[fieldKey]) {
-                    missingFields.push(fieldKey);
-                    missingFieldsLabels.push(fieldsData[fieldKey].label);
+                    missingFields.push(fieldsData[fieldKey].label);
                 }
             });
 
             if (missingFields.length > 0) {
-                updateFieldSelectStyle();
-                
-                let message = '';
-                if (missingFields.length === 1) {
-                    message = `<strong>O campo "${missingFieldsLabels[0]}" precisa ser preenchido ainda.</strong>`;
-                } else {
-                    message = `<strong>Os seguintes campos precisam ser preenchidos ainda:</strong><br>• ${missingFieldsLabels.join('<br>• ')}`;
-                }
-
                 validationMessage.innerHTML = `
                     <i class="fas fa-exclamation-triangle"></i>
-                    ${message}
+                    <strong>Campos pendentes:</strong> ${missingFields.join(', ')}
                 `;
                 validationMessage.classList.add('show');
                 
@@ -638,6 +540,7 @@
                 validationMessage.style.borderLeftColor = '#4caf50';
                 validationMessage.classList.add('show');
                 
+                // Simular processamento
                 validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
                 validateBtn.disabled = true;
                 
