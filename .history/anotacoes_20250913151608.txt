@@ -8,8 +8,8 @@ pip install mysql-connector-python
 
 #APRIMORAMENTO QUE AGUARDA O PROJETO
 {
--inserir dados reais usados como exemplo numa nova tabela 
-e conectar ela ao disgnostico para ser usada como exemplo possibilitando a avaliação
+
+-inserir dados reais usados como exemplo numa nova tabela e conectar ela ao disgnostico
 -conectar página avaliacao.html
 }
 

@@ -6,14 +6,6 @@ pip install flask-cors
 pip install mysql-connector-python
 }
 
-#APRIMORAMENTO QUE AGUARDA O PROJETO
-{
--inserir dados reais usados como exemplo numa nova tabela 
-e conectar ela ao disgnostico para ser usada como exemplo possibilitando a avaliação
--conectar página avaliacao.html
-}
-
-
 
 #integrantes do projeto e seus códigos
 @giulialorrany{
@@ -21,5 +13,3 @@ e conectar ela ao disgnostico para ser usada como exemplo possibilitando a avali
 1.1-arrumar página index.html aparecendo fixamente no inicio o campo de inserção do  nome-ok
 2.0-conexão com o banco de dados estabelecida-ok
 }
-
-

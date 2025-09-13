@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equilibrio - Diagnóstico de Depressão</title>
+    <title>Equilíbrio - Diagnóstico de Depressão</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* Seu CSS original permanece igual */
         * {
             margin: 0;
             padding: 0;
@@ -20,8 +21,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Garante que o body ocupe pelo menos a altura da viewport, mas pode crescer */
-            overflow-x: hidden; /* Remove a barra de rolagem horizontal */
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
@@ -101,6 +102,29 @@
             margin-bottom: 30px;
             text-align: center;
             font-weight: 600;
+        }
+
+        .connection-status {
+            background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+            color: #2e7d32;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4caf50;
+            font-weight: 500;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+            text-align: center;
+        }
+
+        .connection-status.error {
+            background: linear-gradient(135deg, #ffab91, #ffcc80);
+            color: #d84315;
+            border-left: 4px solid #ff5722;
+        }
+
+        .connection-status.show {
+            display: block;
         }
 
         .fixed-field {
@@ -300,7 +324,6 @@
             transform: translateY(-1px);
         }
 
-       
         .floating-icons {
             position: absolute;
             top: 20%;
@@ -310,7 +333,7 @@
             color: #4db6ac;
             animation: float 6s ease-in-out infinite;
             pointer-events: none;
-            width: 0; /* Evita overflow horizontal */
+            width: 0;
         }
 
         @keyframes slideDown {
@@ -388,6 +411,7 @@
 
         <div class="form-container">
             <h2 class="form-title">Avaliação Personalizada</h2>
+            <div class="connection-status" id="connectionStatus"></div>
             
             <form id="diagnosticForm">
                 <div class="fixed-field">
@@ -434,7 +458,7 @@
         const dynamicFields = document.getElementById('dynamicFields');
         const validationMessage = document.getElementById('validationMessage');
         const validateBtn = document.getElementById('validateBtn');
-        const progressFill = document.getElementById('progressFill');
+        const connectionStatus = document.getElementById('connectionStatus');
         const nomeInput = document.getElementById('nome');
 
         const fieldsData = {
@@ -453,12 +477,46 @@
         };
 
         const completedFields = {};
-        const totalFields = Object.keys(fieldsData).length + 1; // +1 para o campo nome
+        const totalFields = Object.keys(fieldsData).length + 1;
+
+        // Função para verificar a conexão com o servidor
+        async function checkConnection() {
+            try {
+                const response = await fetch('http://localhost:5000/testar-conexao', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    connectionStatus.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Conexão bem-sucedida!</strong>
+                    `;
+                    connectionStatus.classList.remove('error');
+                    connectionStatus.classList.add('show');
+                } else {
+                    throw new Error(result.error || 'Erro desconhecido');
+                }
+            } catch (err) {
+                connectionStatus.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Conexão falhou: ${err.message}</strong>
+                `;
+                connectionStatus.classList.add('error', 'show');
+            }
+            // Esconde a mensagem após 5 segundos
+            setTimeout(() => {
+                connectionStatus.classList.remove('show');
+            }, 5000);
+        }
+
+        // Verifica a conexão ao carregar a página
+        window.addEventListener('load', checkConnection);
 
         function updateProgress() {
             const completed = Object.keys(completedFields).length;
             const percentage = (completed / totalFields) * 100;
-            progressFill.style.width = percentage + '%';
+            // Nota: progressFill não existe no seu código atual. Remova ou implemente se necessário.
         }
 
         function createField(fieldKey, fieldData) {
@@ -593,7 +651,7 @@
             });
         }
 
-        validateBtn.addEventListener('click', function() {
+        validateBtn.addEventListener('click', async function() {
             const missingFields = [];
             const missingFieldsLabels = [];
             
@@ -629,22 +687,56 @@
                     validationMessage.classList.remove('show');
                 }, 5000);
             } else {
-                validationMessage.innerHTML = `
-                    <i class="fas fa-check-circle"></i>
-                    <strong>Parabéns!</strong> Todos os campos foram preenchidos. Diagnóstico pronto para análise!
-                `;
-                validationMessage.style.background = 'linear-gradient(135deg, #c8e6c9, #a5d6a7)';
-                validationMessage.style.color = '#2e7d32';
-                validationMessage.style.borderLeftColor = '#4caf50';
-                validationMessage.classList.add('show');
-                
-                validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                validateBtn.disabled = true;
-                
-                setTimeout(() => {
-                    validateBtn.innerHTML = '<i class="fas fa-check-circle"></i> Diagnóstico Concluído!';
-                    validateBtn.style.background = 'linear-gradient(45deg, #4caf50, #66bb6a)';
-                }, 2000);
+                const formData = {
+                    nome: completedFields.nome,
+                    genero: completedFields.genero,
+                    idade: completedFields.idade,
+                    pressaoAcademica: completedFields.pressaoAcademica,
+                    rendimentoAcademico: completedFields.rendimentoAcademico,
+                    satisfacaoEstudo: completedFields.satisfacaoEstudo,
+                    duracaoSono: completedFields.duracaoSono,
+                    habitosAlimentares: completedFields.habitosAlimentares,
+                    grauAcademico: completedFields.grauAcademico,
+                    pensamentoSuicida: completedFields.pensamentoSuicida,
+                    horasEstudando: completedFields.horasEstudando,
+                    pressaoFinanceira: completedFields.pressaoFinanceira,
+                    historicoFamiliar: completedFields.historicoFamiliar
+                };
+
+                try {
+                    const response = await fetch('http://localhost:5000/salvar-diagnostico', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                    const resultado = await response.json();
+                    
+                    validationMessage.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        <strong>${resultado.message}</strong>
+                    `;
+                    validationMessage.style.background = 'linear-gradient(135deg, #c8e6c9, #a5d6a7)';
+                    validationMessage.style.color = '#2e7d32';
+                    validationMessage.style.borderLeftColor = '#4caf50';
+                    validationMessage.classList.add('show');
+                    
+                    validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                    validateBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        validateBtn.innerHTML = '<i class="fas fa-check-circle"></i> Diagnóstico Concluído!';
+                        validateBtn.style.background = 'linear-gradient(45deg, #4caf50, #66bb6a)';
+                    }, 2000);
+                } catch (err) {
+                    validationMessage.innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Erro ao salvar os dados: ${err.message}</strong>
+                    `;
+                    validationMessage.classList.add('show');
+                    setTimeout(() => {
+                        validationMessage.classList.remove('show');
+                    }, 5000);
+                }
             }
         });
     </script>
