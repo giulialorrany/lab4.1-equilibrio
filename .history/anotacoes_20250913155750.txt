@@ -1,7 +1,5 @@
-O projeto é um diagnostico que faz avaliação da necessidade de terapia ou não, 
-com o resultado baseado em dados reais como justificativa pra avaliação  
 
--LINK DO PROJETO NO GITHUB: https://github.com/giulialorrany/lab4.1-equilibrio
+
 
 
 

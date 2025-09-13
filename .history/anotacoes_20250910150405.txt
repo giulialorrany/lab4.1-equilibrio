@@ -1,4 +1,0 @@
-@giulialorrany{
-1-arrumar página index.html aparecendo apenas um campo a ser preenchido por vez
-1-arrumar página index.html
-}

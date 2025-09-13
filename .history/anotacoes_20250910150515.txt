@@ -1,5 +1,0 @@
-@giulialorrany{
-1.0-arrumar página index.html aparecendo apenas um campo a ser preenchido por vez
-1.1-arrumar página index.html aparecendo fixamente no inicio o campo de inserção do  nome
-2.0-
-}
