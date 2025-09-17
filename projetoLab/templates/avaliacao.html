@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equilibrio - Resultado da Avaliação</title>
+    <title>Equilíbrio - Resultado da Avaliação</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -30,11 +30,90 @@
         }
 
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-left: 15vh;
+    position: relative;
+}
+ 
+        .navbar {
+            background: var(--card-background);
+            border-radius: 5px;
+            padding: 15px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+            animation: slideDown 1s ease-out;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
+
+        .navbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4db6ac, #66bb6a, #81c784);
+    border-radius: 15px 15px 0 0;
+}
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+    background: linear-gradient(45deg, #4db6ac, #66bb6a);
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(77, 182, 172, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-link.secondary {
+    background: linear-gradient(45deg, #81c784, #aed581);
+}
+.dashboard-title {
+    font-size: 2.2rem;
+    color: #2e7d32;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+        .nav-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(77, 182, 172, 0.4);
+        }
+
 
         .header {
             text-align: center;
@@ -42,32 +121,9 @@
             animation: slideDown 1s ease-out;
         }
 
-        .logo {
-            font-size: 3rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #4db6ac, #66bb6a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(45deg, #4db6ac, #66bb6a);
-            border-radius: 2px;
-        }
-
         .subtitle {
             font-size: 1.2rem;
-            color: #2e7d32;
+            color: var(--primary-color);
             font-weight: 300;
             opacity: 0.8;
         }
@@ -155,7 +211,7 @@
         .result-description {
             background: rgba(168, 230, 207, 0.1);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 5px;
             border-left: 4px solid var(--accent-color);
             margin-bottom: 30px;
             line-height: 1.6;
@@ -165,7 +221,7 @@
         .recommendation-box {
             background: linear-gradient(135deg, rgba(77, 182, 172, 0.1), rgba(129, 199, 132, 0.1));
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 5px;
             border-left: 4px solid var(--accent-color);
             margin-bottom: 30px;
         }
@@ -190,7 +246,7 @@
             background: linear-gradient(135deg, rgba(255, 87, 34, 0.1), rgba(255, 112, 67, 0.1));
             border: 2px solid #ff5722;
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 5px;
             margin-bottom: 20px;
             animation: urgentPulse 2s infinite;
         }
@@ -238,7 +294,7 @@
         .clinic-info {
             background: rgba(255, 255, 255, 0.9);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 5px;
             margin-top: 20px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             text-align: center;
@@ -427,18 +483,38 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
 
+        @keyframes slideIn {
+            from {
+                transform: translateX(300px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
             }
             
-            .result-container, .tips-section {
-                padding: 25px;
-                border-radius: 15px;
+            .navbar {
+                padding: 10px 15px;
             }
             
-            .logo {
-                font-size: 2.5rem;
+            .nav-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-links {
+                justify-content: center;
+            }
+            
+            .result-container, .tips-section {
+                padding: 25px;
+                border-radius: 5px;
             }
             
             .result-title {
@@ -482,6 +558,11 @@
                 padding: 15px 25px;
                 font-size: 1.1rem;
             }
+            
+            .nav-link {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -491,10 +572,25 @@
     </div>
     
     <div class="container">
+        <nav class="navbar">
+            <div class="nav-content">
+                <div class="nav-logo">Equilíbrio</div>
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Início</a>
+                    <a href="avaliacao.html" class="nav-link secondary"><i class="fas fa-file-alt"></i>Resultado</a>
+                    <a href="graficoGeral.html" class="nav-link"><i class="fas fa-chart-line"></i>Dashboard Geral</a>
+                    <a href="graficoGenero.html" class="nav-link"><i class="fas fa-chart-line"></i>Dashboard Gênero</a>
+                </div>
+            </div>
+        </nav>
+
         <div class="header">
-            <div class="logo">Equilíbrio</div>
+    <h1 class="dashboard-title">Análise Detalhada</h1>
+    <div class="subtitle">Resultado da sua Avaliação</div>
+</div>
+        <!-- <div class="header">
             <div class="subtitle">Resultado da sua Avaliação</div>
-        </div>
+        </div> -->
 
         <div class="result-container" id="resultContainer">
             <div class="result-title" id="resultTitle">
@@ -1025,22 +1121,6 @@
                 });
             }, 2000);
         });
-
-        // CSS para animação de notificação
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from {
-                    transform: translateX(300px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
