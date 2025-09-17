@@ -162,7 +162,7 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: RGBA(255, 255, 255, 0.95);
             border-radius: 5px;
             padding: 30px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
@@ -216,7 +216,7 @@
         }
 
         .chart-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: RGBA(255, 255, 255, 0.95);
             border-radius: 5px;
             padding: 30px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
@@ -250,7 +250,7 @@
         }
 
         .table-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: RGBA(255, 255, 255, 0.95);
             border-radius: 5px;
             padding: 30px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
@@ -337,6 +337,51 @@
         .therapy-no {
             background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
             color: #2e7d32;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-critico {
+            background: linear-gradient(135deg, #ff5722, #ff7043);
+            color: white;
+        }
+
+        .status-muito-critico {
+            background: linear-gradient(135deg, #d32f2f, #f44336);
+            color: white;
+        }
+
+        .status-moderado {
+            background: linear-gradient(135deg, #ff9800, #ffb74d);
+            color: white;
+        }
+
+        .status-atencao {
+            background: linear-gradient(135deg, #2196f3, #42a5f5);
+            color: white;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4db6ac, #66bb6a);
+            border-radius: 4px;
+            transition: width 1s ease-out;
         }
 
         @keyframes slideDown {
@@ -439,9 +484,9 @@
                 <div class="nav-logo">Equilíbrio</div>
                 <div class="nav-links">
                     <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Início</a>
-                    <a href="avaliacao.html" class="nav-link "><i class="fas fa-file-alt"></i>Resultado</a>
-                    <a href="graficoGeral.html" class="nav-link secondary"><i class="fas fa-chart-line"></i>Dashboard Geral</a>
-                    <a href="graficoGenero.html" class="nav-link"><i class="fas fa-chart-line"></i>Dashboard Gênero</a>
+                    <a href="avaliacao.html" class="nav-link"><i class="fas fa-file-alt"></i> Resultado</a>
+                    <a href="graficoGeral.html" class="nav-link secondary"><i class="fas fa-chart-line"></i> Dashboard Geral</a>
+                    <a href="graficoGenero.html" class="nav-link"><i class="fas fa-chart-line"></i> Dashboard Gênero</a>
                 </div>
             </div>
         </nav>
@@ -501,11 +546,6 @@
                 <h3 class="chart-title">Campos Mais Críticos em Depressivos</h3>
                 <canvas id="criticalFieldsChart" class="chart-canvas"></canvas>
             </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">Distribuição por Gênero</h3>
-                <canvas id="genderChart" class="chart-canvas"></canvas>
-            </div>
         </div>
 
         <div class="table-container">
@@ -513,11 +553,12 @@
             <table class="data-table">
                 <thead>
                     <tr>
+                        <th>Ranking</th>
                         <th>Campo</th>
                         <th>Frequência</th>
                         <th>Percentual</th>
                         <th>Valor Médio</th>
-                        <th>Status</th>
+                        <th>Criticidade</th>
                     </tr>
                 </thead>
                 <tbody id="commonFieldsTable">
@@ -565,7 +606,6 @@
             createTherapyChart();
             createTimeChart();
             createCriticalFieldsChart();
-            createGenderChart();
             updateCommonFieldsTable();
         }
 
@@ -718,94 +758,129 @@
             });
         }
 
-        // Gráfico de barras agrupadas - Distribuição por gênero
-        function createGenderChart() {
-            const ctx = document.getElementById('genderChart').getContext('2d');
-            const generos = Object.keys(dashboardData.genero);
-            const totals = generos.map(g => dashboardData.genero[g].total);
-            const terapias = generos.map(g => dashboardData.genero[g].terapia);
-
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Masculino', 'Feminino', 'Não-binário', 'Não Informado'],
-                    datasets: [
-                        {
-                            label: 'Total',
-                            data: totals,
-                            backgroundColor: 'rgba(77, 182, 172, 0.8)',
-                            borderColor: '#4db6ac',
-                            borderWidth: 2
-                        },
-                        {
-                            label: 'Necessitam Terapia',
-                            data: terapias,
-                            backgroundColor: 'rgba(255, 112, 67, 0.8)',
-                            borderColor: '#ff7043',
-                            borderWidth: 2
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                font: {
-                                    size: 12,
-                                    weight: 'bold'
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0,0,0,0.1)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
         // Atualiza a tabela de campos em comum
         function updateCommonFieldsTable() {
             const tableBody = document.getElementById('commonFieldsTable');
             const commonFields = [
-                { campo: 'Pressão Acadêmica', frequencia: 42, percentual: 89.4, valorMedio: '4.2/5', status: 'Crítico' },
-                { campo: 'Pensamento Suicida', frequencia: 38, percentual: 80.9, valorMedio: 'Sim', status: 'Muito Crítico' },
-                { campo: 'Pressão Financeira', frequencia: 35, percentual: 74.5, valorMedio: '7.8/10', status: 'Crítico' },
-                { campo: 'Duração do Sono', frequencia: 33, percentual: 70.2, valorMedio: '4.1h', status: 'Crítico' },
-                { campo: 'Satisfação no Estudo', frequencia: 29, percentual: 61.7, valorMedio: '1.8/5', status: 'Moderado' },
-                { campo: 'Idade', frequencia: 28, percentual: 59.6, valorMedio: '21 anos', status: 'Moderado' },
-                { campo: 'Rendimento Acadêmico', frequencia: 26, percentual: 55.3, valorMedio: '3.2/10', status: 'Moderado' },
-                { campo: 'Hábitos Alimentares', frequencia: 24, percentual: 51.1, valorMedio: 'Pouco', status: 'Atenção' },
-                { campo: 'Histórico Familiar', frequencia: 22, percentual: 46.8, valorMedio: 'Sim', status: 'Atenção' },
-                { campo: 'Horas Estudando', frequencia: 19, percentual: 40.4, valorMedio: '9.2h', status: 'Atenção' }
+                { 
+                    ranking: 1, 
+                    campo: 'Pressão Acadêmica', 
+                    frequencia: 42, 
+                    percentual: 89.4, 
+                    valorMedio: '4.2/5', 
+                    status: 'Muito Crítico',
+                    description: 'Nível extremamente alto de estresse acadêmico'
+                },
+                { 
+                    ranking: 2, 
+                    campo: 'Pensamento Suicida', 
+                    frequencia: 38, 
+                    percentual: 80.9, 
+                    valorMedio: 'Presente', 
+                    status: 'Muito Crítico',
+                    description: 'Ideação suicida identificada'
+                },
+                { 
+                    ranking: 3, 
+                    campo: 'Pressão Financeira', 
+                    frequencia: 35, 
+                    percentual: 74.5, 
+                    valorMedio: '7.8/10', 
+                    status: 'Crítico',
+                    description: 'Alto nível de estresse financeiro'
+                },
+                { 
+                    ranking: 4, 
+                    campo: 'Duração do Sono', 
+                    frequencia: 33, 
+                    percentual: 70.2, 
+                    valorMedio: '4.1h', 
+                    status: 'Crítico',
+                    description: 'Sono insuficiente (< 6h recomendadas)'
+                },
+                { 
+                    ranking: 5, 
+                    campo: 'Satisfação no Estudo', 
+                    frequencia: 29, 
+                    percentual: 61.7, 
+                    valorMedio: '1.8/5', 
+                    status: 'Crítico',
+                    description: 'Baixa satisfação com atividades acadêmicas'
+                },
+                { 
+                    ranking: 6, 
+                    campo: 'Idade', 
+                    frequencia: 28, 
+                    percentual: 59.6, 
+                    valorMedio: '21 anos', 
+                    status: 'Moderado',
+                    description: 'Faixa etária de maior vulnerabilidade'
+                },
+                { 
+                    ranking: 7, 
+                    campo: 'Rendimento Acadêmico', 
+                    frequencia: 26, 
+                    percentual: 55.3, 
+                    valorMedio: '3.2/10', 
+                    status: 'Moderado',
+                    description: 'Performance acadêmica abaixo da média'
+                },
+                { 
+                    ranking: 8, 
+                    campo: 'Hábitos Alimentares', 
+                    frequencia: 24, 
+                    percentual: 51.1, 
+                    valorMedio: 'Irregular', 
+                    status: 'Atenção',
+                    description: 'Padrão alimentar inadequado'
+                },
+                { 
+                    ranking: 9, 
+                    campo: 'Histórico Familiar', 
+                    frequencia: 22, 
+                    percentual: 46.8, 
+                    valorMedio: 'Presente', 
+                    status: 'Atenção',
+                    description: 'Predisposição genética identificada'
+                },
+                { 
+                    ranking: 10, 
+                    campo: 'Horas Estudando', 
+                    frequencia: 19, 
+                    percentual: 40.4, 
+                    valorMedio: '9.2h', 
+                    status: 'Atenção',
+                    description: 'Carga horária excessiva de estudos'
+                }
             ];
 
             tableBody.innerHTML = '';
-            commonFields.forEach((field, index) => {
+            commonFields.forEach(field => {
                 const row = document.createElement('tr');
-                const statusClass = field.status === 'Muito Crítico' || field.status === 'Crítico' ? 'therapy-yes' : 'therapy-no';
+                
+                let statusClass = 'status-atencao';
+                switch(field.status) {
+                    case 'Muito Crítico': statusClass = 'status-muito-critico'; break;
+                    case 'Crítico': statusClass = 'status-critico'; break;
+                    case 'Moderado': statusClass = 'status-moderado'; break;
+                    default: statusClass = 'status-atencao'; break;
+                }
 
                 row.innerHTML = `
-                    <td><strong>${field.campo}</strong></td>
-                    <td>${field.frequencia}</td>
-                    <td>${field.percentual}%</td>
+                    <td><strong>#${field.ranking}</strong></td>
+                    <td>
+                        <strong>${field.campo}</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${field.percentual}%"></div>
+                        </div>
+                    </td>
+                    <td><strong>${field.frequencia}/47</strong></td>
+                    <td><strong>${field.percentual}%</strong></td>
                     <td>${field.valorMedio}</td>
-                    <td><span class="therapy-indicator ${statusClass}">${field.status}</span></td>
+                    <td><span class="status-indicator ${statusClass}">${field.status}</span></td>
                 `;
+                
+                row.title = field.description;
                 tableBody.appendChild(row);
             });
         }

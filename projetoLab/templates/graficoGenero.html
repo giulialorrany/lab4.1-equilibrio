@@ -7,8 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
-    
-    * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -240,24 +239,26 @@
         }
 
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 40px;
+            display: flex;
+            justify-content: center;
             margin-bottom: 40px;
         }
 
-        .table-section {
+        .chart-section {
+            max-height: 520px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 5px;
-            padding: 35px;
+            padding: 30px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
-            animation: slideUp 1s ease-out;
+            animation: slideUp 1s ease-out 0.2s both;
+            max-width: 600px;
+            width: 100%;
         }
 
-        .table-section::before {
+        .chart-section::before {
             content: '';
             position: absolute;
             top: 0;
@@ -281,68 +282,6 @@
         .section-title .icon {
             font-size: 1.5rem;
             color: #4db6ac;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 0.95rem;
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: 15px 12px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .data-table th {
-            background: linear-gradient(135deg, #4db6ac, #66bb6a);
-            color: white;
-            font-weight: 600;
-            border: none;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .data-table tr:nth-child(even) {
-            background-color: rgba(168, 230, 207, 0.1);
-        }
-
-        .data-table tr:hover {
-            background-color: rgba(168, 230, 207, 0.2);
-            transform: scale(1.01);
-            transition: all 0.3s ease;
-        }
-
-        .data-table td:first-child {
-            font-weight: 600;
-            color: #2e7d32;
-        }
-
-        .chart-section {
-            max-height: 520px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 5px;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            animation: slideUp 1s ease-out 0.2s both;
-        }
-
-        .chart-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #4db6ac, #66bb6a, #81c784);
-            border-radius: 15px 15px 0 0;
         }
 
         .chart-canvas {
@@ -378,36 +317,6 @@
             border-radius: 15px 15px 0 0;
         }
 
-        .status-indicator {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-critico {
-            background: linear-gradient(135deg, #ff5722, #ff7043);
-            color: white;
-        }
-
-        .status-muito-critico {
-            background: linear-gradient(135deg, #d32f2f, #f44336);
-            color: white;
-        }
-
-        .status-moderado {
-            background: linear-gradient(135deg, #ff9800, #ffb74d);
-            color: white;
-        }
-
-        .status-atencao {
-            background: linear-gradient(135deg, #2196f3, #42a5f5);
-            color: white;
-        }
-
         .progress-bar {
             height: 8px;
             background: #e0e0e0;
@@ -434,60 +343,6 @@
             pointer-events: none;
         }
 
-        .insights-box {
-            background: linear-gradient(135deg, rgba(168, 230, 207, 0.3), rgba(168, 230, 207, 0.1));
-            border: 2px solid #4db6ac;
-            border-radius: 5px;
-            padding: 25px;
-            margin: 25px 0;
-            position: relative;
-        }
-
-        .insights-box::before {
-            content: '\f0eb';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: linear-gradient(45deg, #4db6ac, #66bb6a);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-        }
-
-        .insights-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2e7d32;
-            margin-bottom: 15px;
-            margin-left: 20px;
-        }
-
-        .insights-list {
-            list-style: none;
-            padding: 0;
-            margin-left: 20px;
-        }
-
-        .insights-list li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-            color: #2e7d32;
-            font-weight: 500;
-        }
-
-        .insights-list li::before {
-            content: '\f058';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            left: 0;
-            color: #4db6ac;
-        }
-
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-50px); }
             to { opacity: 1; transform: translateY(0); }
@@ -505,8 +360,8 @@
 
         @media (max-width: 1200px) {
             .main-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
+                display: flex;
+                justify-content: center;
             }
             
             .chart-section {
@@ -560,14 +415,13 @@
             .nav-buttons {
                 justify-content: center;
             }
-
-            .data-table {
-                font-size: 0.85rem;
+            
+            .gender-detail {
+                padding: 20px;
             }
             
-            .data-table th,
-            .data-table td {
-                padding: 10px 8px;
+            .section-title {
+                font-size: 1.5rem;
             }
         }
 
@@ -576,7 +430,6 @@
                 grid-template-columns: 1fr;
             }
             
-            .table-section,
             .chart-section,
             .gender-detail {
                 padding: 20px;
@@ -584,12 +437,6 @@
             
             .section-title {
                 font-size: 1.5rem;
-            }
-
-            .data-table th,
-            .data-table td {
-                padding: 8px 6px;
-                font-size: 0.8rem;
             }
             
             .nav-link {
@@ -610,9 +457,9 @@
                 <div class="nav-logo">Equilíbrio</div>
                 <div class="nav-links">
                     <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Início</a>
-                    <a href="avaliacao.html" class="nav-link "><i class="fas fa-file-alt"></i>Resultado</a>
-                    <a href="graficoGeral.html" class="nav-link"><i class="fas fa-chart-line"></i>Dashboard Geral</a>
-                    <a href="graficoGenero.html" class="nav-link secondary"><i class="fas fa-chart-line"></i>Dashboard Gênero</a>
+                    <a href="avaliacao.html" class="nav-link"><i class="fas fa-file-alt"></i> Resultado</a>
+                    <a href="graficoGeral.html" class="nav-link"><i class="fas fa-chart-line"></i> Dashboard Geral</a>
+                    <a href="graficoGenero.html" class="nav-link secondary"><i class="fas fa-chart-line"></i> Dashboard Gênero</a>
                 </div>    
             </div>
         </nav>
@@ -661,39 +508,6 @@
         </div>
 
         <div class="main-content">
-            <div class="table-section">
-                <h2 class="section-title">
-                    <i class="fas fa-list-ol icon"></i>
-                    Top 10 Campos em Comum entre Depressivos
-                </h2>
-                
-                <div class="insights-box">
-                    <div class="insights-title">Principais Insights:</div>
-                    <ul class="insights-list">
-                        <li>Pressão Acadêmica aparece em 89,4% dos casos depressivos</li>
-                        <li>Pensamento Suicida está presente em mais de 80% dos casos</li>
-                        <li>Problemas financeiros afetam 3 em cada 4 depressivos</li>
-                        <li>Distúrbios do sono são extremamente comuns (70,2%)</li>
-                    </ul>
-                </div>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Ranking</th>
-                            <th>Campo</th>
-                            <th>Frequência</th>
-                            <th>Percentual</th>
-                            <th>Valor Médio</th>
-                            <th>Criticidade</th>
-                        </tr>
-                    </thead>
-                    <tbody id="criticalFieldsTable">
-                        <!-- Dados serão inseridos pelo JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-
             <div class="chart-section">
                 <h2 class="section-title">
                     <i class="fas fa-chart-pie icon"></i>
@@ -725,100 +539,6 @@
     </div>
 
     <script>
-        // Dados dos campos críticos
-        const criticalFieldsData = [
-            { 
-                ranking: 1, 
-                campo: 'Pressão Acadêmica', 
-                frequencia: 42, 
-                percentual: 89.4, 
-                valorMedio: '4.2/5', 
-                status: 'Muito Crítico',
-                description: 'Nível extremamente alto de estresse acadêmico'
-            },
-            { 
-                ranking: 2, 
-                campo: 'Pensamento Suicida', 
-                frequencia: 38, 
-                percentual: 80.9, 
-                valorMedio: 'Presente', 
-                status: 'Muito Crítico',
-                description: 'Ideação suicida identificada'
-            },
-            { 
-                ranking: 3, 
-                campo: 'Pressão Financeira', 
-                frequencia: 35, 
-                percentual: 74.5, 
-                valorMedio: '7.8/10', 
-                status: 'Crítico',
-                description: 'Alto nível de estresse financeiro'
-            },
-            { 
-                ranking: 4, 
-                campo: 'Duração do Sono', 
-                frequencia: 33, 
-                percentual: 70.2, 
-                valorMedio: '4.1h', 
-                status: 'Crítico',
-                description: 'Sono insuficiente (< 6h recomendadas)'
-            },
-            { 
-                ranking: 5, 
-                campo: 'Satisfação no Estudo', 
-                frequencia: 29, 
-                percentual: 61.7, 
-                valorMedio: '1.8/5', 
-                status: 'Crítico',
-                description: 'Baixa satisfação com atividades acadêmicas'
-            },
-            { 
-                ranking: 6, 
-                campo: 'Idade', 
-                frequencia: 28, 
-                percentual: 59.6, 
-                valorMedio: '21 anos', 
-                status: 'Moderado',
-                description: 'Faixa etária de maior vulnerabilidade'
-            },
-            { 
-                ranking: 7, 
-                campo: 'Rendimento Acadêmico', 
-                frequencia: 26, 
-                percentual: 55.3, 
-                valorMedio: '3.2/10', 
-                status: 'Moderado',
-                description: 'Performance acadêmica abaixo da média'
-            },
-            { 
-                ranking: 8, 
-                campo: 'Hábitos Alimentares', 
-                frequencia: 24, 
-                percentual: 51.1, 
-                valorMedio: 'Irregular', 
-                status: 'Atenção',
-                description: 'Padrão alimentar inadequado'
-            },
-            { 
-                ranking: 9, 
-                campo: 'Histórico Familiar', 
-                frequencia: 22, 
-                percentual: 46.8, 
-                valorMedio: 'Presente', 
-                status: 'Atenção',
-                description: 'Predisposição genética identificada'
-            },
-            { 
-                ranking: 10, 
-                campo: 'Horas Estudando', 
-                frequencia: 19, 
-                percentual: 40.4, 
-                valorMedio: '9.2h', 
-                status: 'Atenção',
-                description: 'Carga horária excessiva de estudos'
-            }
-        ];
-
         // Dados de gênero
         const genderData = {
             masculino: { total: 68, terapia: 18, percentual: 26.5 },
@@ -828,44 +548,9 @@
         };
 
         function initializePage() {
-            populateCriticalFieldsTable();
             createGenderDistributionChart();
             createGenderComparisonChart();
             createGenderStatistics();
-        }
-
-        function populateCriticalFieldsTable() {
-            const tableBody = document.getElementById('criticalFieldsTable');
-            tableBody.innerHTML = '';
-
-            criticalFieldsData.forEach(field => {
-                const row = document.createElement('tr');
-                
-                let statusClass = 'status-atencao';
-                switch(field.status) {
-                    case 'Muito Crítico': statusClass = 'status-muito-critico'; break;
-                    case 'Crítico': statusClass = 'status-critico'; break;
-                    case 'Moderado': statusClass = 'status-moderado'; break;
-                    default: statusClass = 'status-atencao'; break;
-                }
-
-                row.innerHTML = `
-                    <td><strong>#${field.ranking}</strong></td>
-                    <td>
-                        <strong>${field.campo}</strong>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${field.percentual}%"></div>
-                        </div>
-                    </td>
-                    <td><strong>${field.frequencia}/47</strong></td>
-                    <td><strong>${field.percentual}%</strong></td>
-                    <td>${field.valorMedio}</td>
-                    <td><span class="status-indicator ${statusClass}">${field.status}</span></td>
-                `;
-                
-                row.title = field.description;
-                tableBody.appendChild(row);
-            });
         }
 
         function createGenderDistributionChart() {
@@ -1120,7 +805,7 @@
             });
         }
 
-        // Initialize the page when the DOM is fully loaded
+        // Inicializa a página quando o DOM estiver completamente carregado
         document.addEventListener('DOMContentLoaded', initializePage);
     </script>
 </body>
