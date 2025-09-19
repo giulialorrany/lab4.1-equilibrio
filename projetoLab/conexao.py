@@ -16,7 +16,8 @@ def get_db_connection():
             host='localhost',               # Endereço do servidor MySQL
             database='project_equilibrio',  # Nome do banco de dados
             user='root',                   # Usuário do MySQL
-            password='senac123'            # Senha do usuário do MySQL
+            password='',            # Senha do usuário do MySQL
+            port='3307'
         )
         print("Conexão com MySQL estabelecida!")
         return connection
