@@ -539,12 +539,11 @@
     </div>
 
     <script>
+        let dados = {};
         // Dados de gênero
-        const genderData = {
+        let genderData = {
             masculino: { total: 68, terapia: 18, percentual: 26.5 },
-            feminino: { total: 72, terapia: 25, percentual: 34.7 },
-            naoBinario: { total: 8, terapia: 3, percentual: 37.5 },
-            naoInformado: { total: 4, terapia: 1, percentual: 25.0 }
+            feminino: { total: 72, terapia: 25, percentual: 34.7 }
         };
 
         function initializePage() {
@@ -556,12 +555,10 @@
         function createGenderDistributionChart() {
             const ctx = document.getElementById('genderChart').getContext('2d');
             
-            const labels = ['Masculino', 'Feminino', 'Não-binário', 'Não Informado'];
+            const labels = ['Masculino', 'Feminino'];
             const therapyData = [
                 genderData.masculino.terapia,
-                genderData.feminino.terapia,
-                genderData.naoBinario.terapia,
-                genderData.naoInformado.terapia
+                genderData.feminino.terapia
             ];
 
             new Chart(ctx, {
@@ -573,15 +570,11 @@
                         data: therapyData,
                         backgroundColor: [
                             'rgba(77, 182, 172, 0.8)',
-                            'rgba(255, 112, 67, 0.8)',
-                            'rgba(129, 199, 132, 0.8)',
-                            'rgba(174, 213, 129, 0.8)'
+                            'rgba(255, 112, 67, 0.8)'
                         ],
                         borderColor: [
                             '#4db6ac',
-                            '#ff7043',
-                            '#81c784',
-                            '#aed581'
+                            '#ff7043'
                         ],
                         borderWidth: 3,
                         hoverOffset: 15
@@ -639,18 +632,14 @@
         function createGenderComparisonChart() {
             const ctx = document.getElementById('genderComparisonChart').getContext('2d');
             
-            const labels = ['Masculino', 'Feminino', 'Não-binário', 'Não Informado'];
+            const labels = ['Masculino', 'Feminino'];
             const totalData = [
                 genderData.masculino.total,
-                genderData.feminino.total,
-                genderData.naoBinario.total,
-                genderData.naoInformado.total
+                genderData.feminino.total
             ];
             const therapyData = [
                 genderData.masculino.terapia,
-                genderData.feminino.terapia,
-                genderData.naoBinario.terapia,
-                genderData.naoInformado.terapia
+                genderData.feminino.terapia
             ];
 
             new Chart(ctx, {
@@ -766,18 +755,6 @@
                     total: genderData.feminino.total,
                     terapia: genderData.feminino.terapia,
                     percentual: genderData.feminino.percentual
-                },
-                {
-                    gender: 'Não-binário',
-                    total: genderData.naoBinario.total,
-                    terapia: genderData.naoBinario.terapia,
-                    percentual: genderData.naoBinario.percentual
-                },
-                {
-                    gender: 'Não Informado',
-                    total: genderData.naoInformado.total,
-                    terapia: genderData.naoInformado.terapia,
-                    percentual: genderData.naoInformado.percentual
                 }
             ];
 
@@ -806,7 +783,27 @@
         }
 
         // Inicializa a página quando o DOM estiver completamente carregado
-        document.addEventListener('DOMContentLoaded', initializePage);
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const resposta = await fetch("http://localhost:5000/getTable_graficoGenero");
+
+                if (!resposta.ok) {
+                    throw new Error('Erro ao buscar dados do backend');
+                }
+
+                const dados = await resposta.json();
+                console.log(dados);  // debug
+
+                if (dados && dados.genderData !== undefined) {
+                    genderData = dados.genderData;   // agora usamos o que veio do backend
+                    initializePage();
+                } else {
+                    console.error("Dados incompletos ou inválidos");
+                }
+            } catch (error) {
+                console.error("Erro ao buscar dados do backend:", error);
+            }
+        });
     </script>
 </body>
 </html>

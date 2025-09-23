@@ -309,6 +309,61 @@ def grafico_genero():
             connection.close()
             logging.info("Conexão com o banco fechada")
 
+@app.route('/getTable_graficoGenero', methods=['GET'])
+def getTable_graficoGenero():
+    connection = get_db_connection()
+    if connection is None:
+        return jsonify({'error': 'Erro de conexão com o banco'}), 500
+    try:
+        cursor = connection.cursor()
+
+        # evolução temporal (últimos 7 dias)
+        cursor.execute("""
+            SELECT 
+                genero,
+                COUNT(*) AS total,
+                SUM(CASE WHEN diagnostico_previsto = 'Possível depressão' THEN 1 ELSE 0 END) AS terapia,
+                ROUND(
+                    SUM(CASE WHEN diagnostico_previsto = 'Possível depressão' THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
+                    1
+                ) AS percentual
+            FROM 
+                diagnosticos
+            GROUP BY 
+                genero
+            ORDER BY 
+                CASE genero
+                    WHEN 'masculino' THEN 1
+                    WHEN 'feminino' THEN 2
+                    ELSE 5
+                END;
+        """)
+        row1 = cursor.fetchone()
+        row2 = cursor.fetchone()
+
+        masculino = {'total': row1[1], 'terapia': row1[2], 'percentual': row1[3]}
+        feminino = {'total': row2[1], 'terapia': row2[2], 'percentual': row2[3]}
+
+        ## total de formulários
+        #cursor.execute("SELECT COUNT(id) FROM diagnosticos;")
+        #totalFormularios = cursor.fetchone()[0]
+
+        return jsonify({
+            "genderData": {
+                "masculino": masculino,
+                "feminino": feminino
+            }
+        }), 200
+
+    except Error as e:
+        print(f"Erro ao consultar: {e}")
+        return jsonify({"error": "Erro ao salvar no banco"}), 500
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
+
 # Nova rota para gráfico geral
 @app.route('/graficogeral')
 def grafico_geral():
@@ -381,21 +436,7 @@ def getTable_graficoGeral():
             et_formularios.append(tempo[1])
             et_terapia.append(tempo[2])
 
-        # distribuição por gênero
-        cursor.execute("""
-            SELECT genero,
-                   COUNT(*) AS total,
-                   SUM(CASE WHEN diagnostico_previsto = 'Possível depressão' THEN 1 ELSE 0 END) AS terapia
-            FROM diagnosticos
-            GROUP BY genero;
-        """)
-        genero_rows = cursor.fetchall()
-        genero = {}
-        for row in genero_rows:
-            genero[row[0] if row[0] else "Não Informado"] = {
-                "total": row[1],
-                "terapia": row[2]
-            }
+
 
         # campos críticos (exemplo com alguns campos principais)
         camposCriticos = []
@@ -454,7 +495,6 @@ def getTable_graficoGeral():
                 "formularios": et_formularios,
                 "terapia": et_terapia
             },
-            "genero": genero,
             "camposCriticos": camposCriticos
         }), 200
 
