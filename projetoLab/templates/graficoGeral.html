@@ -6,6 +6,7 @@
     <title>Dashboard - Equilíbrio</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         :root {
             --primary-color: #2e7d32;
@@ -483,10 +484,10 @@
             <div class="nav-content">
                 <div class="nav-logo">Equilíbrio</div>
                 <div class="nav-links">
-                    <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Início</a>
-                    <a href="avaliacao.html" class="nav-link"><i class="fas fa-file-alt"></i> Resultado</a>
-                    <a href="graficoGeral.html" class="nav-link secondary"><i class="fas fa-chart-line"></i> Dashboard Geral</a>
-                    <a href="graficoGenero.html" class="nav-link"><i class="fas fa-chart-line"></i> Dashboard Gênero</a>
+                    <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Início</a>
+                    <a href="avaliacao" class="nav-link secondary"><i class="fas fa-file-alt"></i>Resultado</a>
+                    <a href="graficogeral" class="nav-link"><i class="fas fa-chart-line"></i>Dashboard Geral</a>
+                    <a href="graficogenero" class="nav-link"><i class="fas fa-chart-line"></i>Dashboard Gênero</a>
                 </div>
             </div>
         </nav>
@@ -569,51 +570,21 @@
     </div>
 
     <script>
-        window.onload = async function() {
-            const resposta = await fetch("http://localhost:5000/get_all");
-            const dados = await resposta.json();
-            console.log(dados.totalFormularios);
-        }
+        let dados = {};
 
         // Dados simulados (em um cenário real, viriam do backend)
-        const dashboardData = {
-            totalFormularios: 15,
-            necessitamTerapia: 47,
-            naoNecessitam: 105,
-
-            // Evolução temporal (últimos 7 dias)
-            evolucaoTemporal: {
-                labels: ['11/09', '12/09', '13/09', '14/09', '15/09', '16/09', '17/09'],
-                formularios: [15, 18, 22, 25, 28, 21, 23],
-                terapia: [5, 7, 8, 9, 10, 7, 8]
-            },
-
-            // Campos mais críticos
-            camposCriticos: [
-                { campo: 'Pressão Acadêmica', frequencia: 42, percentual: 89.4 },
-                { campo: 'Pensamento Suicida', frequencia: 38, percentual: 80.9 },
-                { campo: 'Pressão Financeira', frequencia: 35, percentual: 74.5 },
-                { campo: 'Duração do Sono', frequencia: 33, percentual: 70.2 },
-                { campo: 'Satisfação no Estudo', frequencia: 29, percentual: 61.7 }
-            ],
-
-            // Distribuição por gênero
-            genero: {
-                masculino: { total: 68, terapia: 18 },
-                feminino: { total: 72, terapia: 25 },
-                naoBinario: { total: 8, terapia: 3 },
-                naoInformado: { total: 4, terapia: 1 }
-            }
-        };
+        let dashboardData = {};
 
         // Função para inicializar o dashboard
         function initializeDashboard() {
+            console.log("Inicializando Dashboard...");
             updateStatCards();
             createTherapyChart();
             createTimeChart();
             createCriticalFieldsChart();
             updateCommonFieldsTable();
         }
+
 
         // Atualiza os cards de estatísticas
         function updateStatCards() {
@@ -738,161 +709,71 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            grid: {
-                                color: 'rgba(0,0,0,0.1)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                maxRotation: 45
-                            }
-                        }
+                        y: { beginAtZero: true, max: 100 },
+                        x: { ticks: { maxRotation: 45 } }
                     }
                 }
             });
         }
 
+
         // Atualiza a tabela de campos em comum
         function updateCommonFieldsTable() {
             const tableBody = document.getElementById('commonFieldsTable');
-            const commonFields = [
-                { 
-                    ranking: 1, 
-                    campo: 'Pressão Acadêmica', 
-                    frequencia: 42, 
-                    percentual: 89.4, 
-                    valorMedio: '4.2/5', 
-                    status: 'Muito Crítico',
-                    description: 'Nível extremamente alto de estresse acadêmico'
-                },
-                { 
-                    ranking: 2, 
-                    campo: 'Pensamento Suicida', 
-                    frequencia: 38, 
-                    percentual: 80.9, 
-                    valorMedio: 'Presente', 
-                    status: 'Muito Crítico',
-                    description: 'Ideação suicida identificada'
-                },
-                { 
-                    ranking: 3, 
-                    campo: 'Pressão Financeira', 
-                    frequencia: 35, 
-                    percentual: 74.5, 
-                    valorMedio: '7.8/10', 
-                    status: 'Crítico',
-                    description: 'Alto nível de estresse financeiro'
-                },
-                { 
-                    ranking: 4, 
-                    campo: 'Duração do Sono', 
-                    frequencia: 33, 
-                    percentual: 70.2, 
-                    valorMedio: '4.1h', 
-                    status: 'Crítico',
-                    description: 'Sono insuficiente (< 6h recomendadas)'
-                },
-                { 
-                    ranking: 5, 
-                    campo: 'Satisfação no Estudo', 
-                    frequencia: 29, 
-                    percentual: 61.7, 
-                    valorMedio: '1.8/5', 
-                    status: 'Crítico',
-                    description: 'Baixa satisfação com atividades acadêmicas'
-                },
-                { 
-                    ranking: 6, 
-                    campo: 'Idade', 
-                    frequencia: 28, 
-                    percentual: 59.6, 
-                    valorMedio: '21 anos', 
-                    status: 'Moderado',
-                    description: 'Faixa etária de maior vulnerabilidade'
-                },
-                { 
-                    ranking: 7, 
-                    campo: 'Rendimento Acadêmico', 
-                    frequencia: 26, 
-                    percentual: 55.3, 
-                    valorMedio: '3.2/10', 
-                    status: 'Moderado',
-                    description: 'Performance acadêmica abaixo da média'
-                },
-                { 
-                    ranking: 8, 
-                    campo: 'Hábitos Alimentares', 
-                    frequencia: 24, 
-                    percentual: 51.1, 
-                    valorMedio: 'Irregular', 
-                    status: 'Atenção',
-                    description: 'Padrão alimentar inadequado'
-                },
-                { 
-                    ranking: 9, 
-                    campo: 'Histórico Familiar', 
-                    frequencia: 22, 
-                    percentual: 46.8, 
-                    valorMedio: 'Presente', 
-                    status: 'Atenção',
-                    description: 'Predisposição genética identificada'
-                },
-                { 
-                    ranking: 10, 
-                    campo: 'Horas Estudando', 
-                    frequencia: 19, 
-                    percentual: 40.4, 
-                    valorMedio: '9.2h', 
-                    status: 'Atenção',
-                    description: 'Carga horária excessiva de estudos'
-                }
-            ];
-
             tableBody.innerHTML = '';
-            commonFields.forEach(field => {
+
+            dashboardData.camposCriticos.forEach((field, index) => {
                 const row = document.createElement('tr');
                 
                 let statusClass = 'status-atencao';
-                switch(field.status) {
-                    case 'Muito Crítico': statusClass = 'status-muito-critico'; break;
-                    case 'Crítico': statusClass = 'status-critico'; break;
-                    case 'Moderado': statusClass = 'status-moderado'; break;
-                    default: statusClass = 'status-atencao'; break;
-                }
+                if (field.percentual >= 80) statusClass = 'status-muito-critico';
+                else if (field.percentual >= 60) statusClass = 'status-critico';
+                else if (field.percentual >= 40) statusClass = 'status-moderado';
 
                 row.innerHTML = `
-                    <td><strong>#${field.ranking}</strong></td>
+                    <td><strong>#${index + 1}</strong></td>
                     <td>
                         <strong>${field.campo}</strong>
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: ${field.percentual}%"></div>
                         </div>
                     </td>
-                    <td><strong>${field.frequencia}/47</strong></td>
+                    <td><strong>${field.frequencia}/${dashboardData.necessitamTerapia}</strong></td>
                     <td><strong>${field.percentual}%</strong></td>
-                    <td>${field.valorMedio}</td>
-                    <td><span class="status-indicator ${statusClass}">${field.status}</span></td>
+                    <td>-</td>
+                    <td><span class="status-indicator ${statusClass}">${statusClass.replace('status-', '').toUpperCase()}</span></td>
                 `;
-                
-                row.title = field.description;
                 tableBody.appendChild(row);
             });
         }
 
+
         // Inicializa o dashboard quando a página carrega
-        document.addEventListener('DOMContentLoaded', initializeDashboard);
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const resposta = await fetch("http://localhost:5000/getTable_graficoGeral");
+
+                if (!resposta.ok) {
+                    throw new Error('Erro ao buscar dados do backend');
+                }
+
+                const dados = await resposta.json();
+                console.log(dados);  // debug
+
+                if (dados && dados.totalFormularios !== undefined) {
+                    dashboardData = dados;   // agora usamos o que veio do backend
+                    initializeDashboard();
+                } else {
+                    console.error("Dados incompletos ou inválidos");
+                }
+            } catch (error) {
+                console.error("Erro ao buscar dados do backend:", error);
+            }
+        });
+
+
     </script>
 </body>
 </html>
