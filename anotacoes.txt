@@ -1,0 +1,38 @@
+O projeto é um diagnostico que faz avaliação da necessidade de terapia ou não, 
+com o resultado baseado em dados reais como justificativa pra avaliação  
+
+-LINK DO PROJETO NO GITHUB: https://github.com/giulialorrany/lab4.1-equilibrio
+
+
+
+
+
+
+
+
+
+
+servir front-end e beck-end com: http://127.0.0.1:5000/
+instalar dependencias como cors, flask-cors mysql-connector-python pandas scikit-learn  numpy
+{COMANDOS DE INSTALAÇÃO: 
+pip install flask  
+pip install flask-cors
+pip install mysql-connector-python
+}
+
+#APRIMORAMENTO QUE AGUARDA O PROJETO
+{ 
+-conectar ela ao disgnostico para ser usada como exemplo possibilitando a avaliação
+-conectar página avaliacao.html
+}
+
+
+
+#integrantes do projeto e seus códigos
+@giulialorrany{
+1.0-arrumar página index.html aparecendo apenas um campo a ser preenchido por vez-ok
+1.1-arrumar página index.html aparecendo fixamente no inicio o campo de inserção do  nome-ok
+2.0-conexão com o banco de dados estabelecida-ok
+}
+
+
