@@ -13,7 +13,11 @@ com o resultado baseado em dados reais como justificativa pra avaliação
 
 
 servir front-end e beck-end com: http://127.0.0.1:5000/
+<<<<<<< HEAD
 instalar dependencias como cors, flask-cors mysql-connector-python pandas scikit-learn  numpy
+=======
+instalar dependencias como cors, flask-cors, mysql-connector-python pandas scikit-learn  numpy
+>>>>>>> bf5ffa7fb126acd6ab5346500a9a55f620c25f7e
 {COMANDOS DE INSTALAÇÃO: 
 pip install flask  
 pip install flask-cors
