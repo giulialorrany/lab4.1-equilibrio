@@ -274,5 +274,75 @@ def avaliacao():
     logging.info("Rota /avaliacao acessada")
     return render_template('avaliacao.html')  # Deve estar em templates/
 
+# Nova rota para gráfico de gênero
+@app.route('/graficogenero')
+def grafico_genero():
+    logging.info("Rota /graficogenero acessada")
+    connection = get_db_connection()
+    if connection is None:
+        logging.error("Erro ao conectar ao banco para gráfico de gênero")
+        return jsonify({'error': 'Erro ao conectar ao banco'}), 500
+    
+    try:
+        cursor = connection.cursor()
+        # Consulta para contar por gênero na tabela 'diagnosticos'
+        query = """
+            SELECT genero, COUNT(*) as total
+            FROM diagnosticos
+            GROUP BY genero
+        """
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        # Preparar dados para o gráfico
+        genero_data = {row[0]: row[1] for row in results if row[0]}  # Ignora valores nulos
+        logging.info(f"Dados para gráfico de gênero: {genero_data}")
+        
+        return render_template('graficoGenero.html', genero_data=genero_data)
+    
+    except Error as e:
+        logging.error(f"Erro ao consultar dados para gráfico de gênero: {e}")
+        return jsonify({'error': f'Erro ao consultar dados: {e}'}), 500
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            logging.info("Conexão com o banco fechada")
+
+# Nova rota para gráfico geral
+@app.route('/graficogeral')
+def grafico_geral():
+    logging.info("Rota /graficogeral acessada")
+    connection = get_db_connection()
+    if connection is None:
+        logging.error("Erro ao conectar ao banco para gráfico geral")
+        return jsonify({'error': 'Erro ao conectar ao banco'}), 500
+    
+    try:
+        cursor = connection.cursor()
+        # Consulta para contar diagnósticos de depressão
+        query = """
+            SELECT diagnostico_previsto, COUNT(*) as total
+            FROM diagnosticos
+            GROUP BY diagnostico_previsto
+        """
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        # Preparar dados para o gráfico geral
+        geral_data = {row[0]: row[1] for row in results if row[0]}  # Ignora valores nulos
+        logging.info(f"Dados para gráfico geral: {geral_data}")
+        
+        return render_template('graficoGeral.html', geral_data=geral_data)
+    
+    except Error as e:
+        logging.error(f"Erro ao consultar dados para gráfico geral: {e}")
+        return jsonify({'error': f'Erro ao consultar dados: {e}'}), 500
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            logging.info("Conexão com o banco fechada")
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
