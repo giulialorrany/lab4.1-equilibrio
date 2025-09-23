@@ -13,7 +13,7 @@ com o resultado baseado em dados reais como justificativa pra avaliação
 
 
 servir front-end e beck-end com: http://127.0.0.1:5000/
-instalar dependencias como cors, flask-cors e mysql-connector-python
+instalar dependencias como cors, flask-cors, mysql-connector-python pandas scikit-learn  numpy
 {COMANDOS DE INSTALAÇÃO: 
 pip install flask  
 pip install flask-cors
@@ -21,9 +21,8 @@ pip install mysql-connector-python
 }
 
 #APRIMORAMENTO QUE AGUARDA O PROJETO
-{
--inserir dados reais usados como exemplo numa nova tabela 
-e conectar ela ao disgnostico para ser usada como exemplo possibilitando a avaliação
+{ 
+-conectar ela ao disgnostico para ser usada como exemplo possibilitando a avaliação
 -conectar página avaliacao.html
 }
 

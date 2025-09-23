@@ -831,87 +831,115 @@
             ]
         };
 
-        // Simular dados do formulário (substitua pela integração real)
+
+
+
+
+
+
+
+
         function getFormData() {
-            // Exemplo de dados - substitua pela lógica real de recuperação dos dados
-            const urlParams = new URLSearchParams(window.location.search);
-            const demo = urlParams.get('demo') || 'moderate';
+    // Tenta recuperar os dados do localStorage
+    const formData = JSON.parse(localStorage.getItem('formData')) || {};
+    
+    // Retorna os dados ou valores padrão se não houver nada no localStorage
+    return {
+        genero: formData.genero || 'Masculino',
+        idade: formData.idade || 25,
+        pressaoAcademica: formData.pressaoAcademica || 1,
+        rendimentoAcademico: formData.rendimentoAcademico || 9,
+        satisfacaoEstudo: formData.satisfacaoEstudo || 5,
+        duracaoSono: formData.duracaoSono || 8,
+        habitosAlimentares: formData.habitosAlimentares || 'Muito',
+        grauAcademico: formData.grauAcademico || 'Graduação',
+        pensamentoSuicida: formData.pensamentoSuicida || 'Não',
+        horasEstudando: formData.horasEstudando || 4,
+        pressaoFinanceira: formData.pressaoFinanceira || 1,
+        historicoFamiliar: formData.historicoFamiliar || 'Não'
+    };
+}
+        // Simular dados do formulário (substitua pela integração real)
+        // function getFormData() {
+        //     // Exemplo de dados - substitua pela lógica real de recuperação dos dados
+        //     const urlParams = new URLSearchParams(window.location.search);
+        //     const demo = urlParams.get('demo') || 'moderate';
             
-            const demoData = {
-                excellent: {
-                    genero: 'Masculino',
-                    idade: 25,
-                    pressaoAcademica: 1,
-                    rendimentoAcademico: 9,
-                    satisfacaoEstudo: 5,
-                    duracaoSono: 8,
-                    habitosAlimentares: 'Muito',
-                    grauAcademico: 'Graduação',
-                    pensamentoSuicida: 'Não',
-                    horasEstudando: 4,
-                    pressaoFinanceira: 1,
-                    historicoFamiliar: 'Não'
-                },
-                good: {
-                    genero: 'Feminino',
-                    idade: 22,
-                    pressaoAcademica: 2,
-                    rendimentoAcademico: 7,
-                    satisfacaoEstudo: 4,
-                    duracaoSono: 7,
-                    habitosAlimentares: 'Moderado',
-                    grauAcademico: 'Graduação',
-                    pensamentoSuicida: 'Não',
-                    horasEstudando: 5,
-                    pressaoFinanceira: 3,
-                    historicoFamiliar: 'Não'
-                },
-                moderate: {
-                    genero: 'Feminino',
-                    idade: 20,
-                    pressaoAcademica: 4,
-                    rendimentoAcademico: 5,
-                    satisfacaoEstudo: 2,
-                    duracaoSono: 5,
-                    habitosAlimentares: 'Pouco',
-                    grauAcademico: 'Graduação',
-                    pensamentoSuicida: 'Não',
-                    horasEstudando: 8,
-                    pressaoFinanceira: 6,
-                    historicoFamiliar: 'Sim'
-                },
-                high: {
-                    genero: 'Não-binário',
-                    idade: 19,
-                    pressaoAcademica: 5,
-                    rendimentoAcademico: 3,
-                    satisfacaoEstudo: 1,
-                    duracaoSono: 4,
-                    habitosAlimentares: 'Pouco',
-                    grauAcademico: 'Ensino Médio',
-                    pensamentoSuicida: 'Não',
-                    horasEstudando: 12,
-                    pressaoFinanceira: 8,
-                    historicoFamiliar: 'Sim'
-                },
-                critical: {
-                    genero: 'Feminino',
-                    idade: 18,
-                    pressaoAcademica: 5,
-                    rendimentoAcademico: 1,
-                    satisfacaoEstudo: 0,
-                    duracaoSono: 3,
-                    habitosAlimentares: 'Pouco',
-                    grauAcademico: 'Ensino Médio',
-                    pensamentoSuicida: 'Sim',
-                    horasEstudando: 14,
-                    pressaoFinanceira: 10,
-                    historicoFamiliar: 'Sim'
-                }
-            };
+        //     const demoData = {
+        //         excellent: {
+        //             genero: 'Masculino',
+        //             idade: 25,
+        //             pressaoAcademica: 1,
+        //             rendimentoAcademico: 9,
+        //             satisfacaoEstudo: 5,
+        //             duracaoSono: 8,
+        //             habitosAlimentares: 'Muito',
+        //             grauAcademico: 'Graduação',
+        //             pensamentoSuicida: 'Não',
+        //             horasEstudando: 4,
+        //             pressaoFinanceira: 1,
+        //             historicoFamiliar: 'Não'
+        //         },
+        //         good: {
+        //             genero: 'Feminino',
+        //             idade: 22,
+        //             pressaoAcademica: 2,
+        //             rendimentoAcademico: 7,
+        //             satisfacaoEstudo: 4,
+        //             duracaoSono: 7,
+        //             habitosAlimentares: 'Moderado',
+        //             grauAcademico: 'Graduação',
+        //             pensamentoSuicida: 'Não',
+        //             horasEstudando: 5,
+        //             pressaoFinanceira: 3,
+        //             historicoFamiliar: 'Não'
+        //         },
+        //         moderate: {
+        //             genero: 'Feminino',
+        //             idade: 20,
+        //             pressaoAcademica: 4,
+        //             rendimentoAcademico: 5,
+        //             satisfacaoEstudo: 2,
+        //             duracaoSono: 5,
+        //             habitosAlimentares: 'Pouco',
+        //             grauAcademico: 'Graduação',
+        //             pensamentoSuicida: 'Não',
+        //             horasEstudando: 8,
+        //             pressaoFinanceira: 6,
+        //             historicoFamiliar: 'Sim'
+        //         },
+        //         high: {
+        //             genero: 'Não-binário',
+        //             idade: 19,
+        //             pressaoAcademica: 5,
+        //             rendimentoAcademico: 3,
+        //             satisfacaoEstudo: 1,
+        //             duracaoSono: 4,
+        //             habitosAlimentares: 'Pouco',
+        //             grauAcademico: 'Ensino Médio',
+        //             pensamentoSuicida: 'Não',
+        //             horasEstudando: 12,
+        //             pressaoFinanceira: 8,
+        //             historicoFamiliar: 'Sim'
+        //         },
+        //         critical: {
+        //             genero: 'Feminino',
+        //             idade: 18,
+        //             pressaoAcademica: 5,
+        //             rendimentoAcademico: 1,
+        //             satisfacaoEstudo: 0,
+        //             duracaoSono: 3,
+        //             habitosAlimentares: 'Pouco',
+        //             grauAcademico: 'Ensino Médio',
+        //             pensamentoSuicida: 'Sim',
+        //             horasEstudando: 14,
+        //             pressaoFinanceira: 10,
+        //             historicoFamiliar: 'Sim'
+        //         }
+        //     };
             
-            return demoData[demo] || demoData.moderate;
-        }
+        //     return demoData[demo] || demoData.moderate;
+        // }
 
         // Calcular pontuação baseada nos dados do formulário
         function calculateScore(formData) {

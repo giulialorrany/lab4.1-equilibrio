@@ -569,9 +569,15 @@
     </div>
 
     <script>
+        window.onload = async function() {
+            const resposta = await fetch("http://localhost:5000/get_all");
+            const dados = await resposta.json();
+            console.log(dados.totalFormularios);
+        }
+
         // Dados simulados (em um cenário real, viriam do backend)
         const dashboardData = {
-            totalFormularios: 152,
+            totalFormularios: 15,
             necessitamTerapia: 47,
             naoNecessitam: 105,
 

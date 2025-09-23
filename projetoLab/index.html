@@ -432,7 +432,7 @@
                         <option value="satisfacaoEstudo">Satisfação no Estudo (0-5)</option>
                         <option value="duracaoSono">Duração do Sono (horas)</option>
                         <option value="habitosAlimentares">Hábitos Alimentares</option>
-                        <option value="grauAcademico">Grau Acadêmico</option>
+                        <option value="grauAcademico">Graduação</option>
                         <option value="pensamentoSuicida">Pensamento Suicida</option>
                         <option value="horasEstudando">Horas Estudando por Dia</option>
                         <option value="pressaoFinanceira">Pressão Financeira</option>
@@ -462,14 +462,14 @@
         const nomeInput = document.getElementById('nome');
 
         const fieldsData = {
-            genero: { label: 'Gênero', type: 'select', options: ['Masculino', 'Feminino', 'Não-binário', 'Prefiro não informar'] },
+            genero: { label: 'Gênero', type: 'select', options: ['Masculino', 'Feminino'] },
             idade: { label: 'Idade', type: 'number', min: 16, max: 100 },
             pressaoAcademica: { label: 'Pressão Acadêmica', type: 'range', min: 0, max: 5 },
             rendimentoAcademico: { label: 'Índice de Rendimento Acadêmico', type: 'range', min: 0, max: 10 },
             satisfacaoEstudo: { label: 'Satisfação no Estudo', type: 'range', min: 0, max: 5 },
             duracaoSono: { label: 'Duração do Sono (horas)', type: 'number', min: 1, max: 24 },
             habitosAlimentares: { label: 'Hábitos Alimentares', type: 'select', options: ['Pouco', 'Moderado', 'Muito'] },
-            grauAcademico: { label: 'Grau Acadêmico', type: 'select', options: ['Ensino Médio', 'Graduação', 'Pós-graduação', 'Mestrado', 'Doutorado'] },
+            grauAcademico: { label: 'Graduação', type: 'select', options: ['Bacharel em Administração de Empresas', 'Bacharel em Aplicações de Computador', 'Bacharel em Arquitetura', 'Bacharel em Artes', 'Bacharel em Ciências', 'Bacharel em Comércio', 'Bacharel em Direito', 'Bacharel em Educação', 'Bacharel em Engenharia', 'Bacharel em Farmácia', 'Bacharel em Gestão Hoteleira', 'Bacharel em Medicina, Bacharel em Cirurgia', 'Bacharel em Tecnologia', 'Doutor em Filosofia', 'Doutor em Medicina', 'Ensino Médio Completo', 'Mestre em Administração de Empresas', 'Mestre em Aplicações de Computadores', 'Mestre em Artes', 'Mestre em Ciências', 'Mestre em Comércio', 'Mestre em Direito', 'Mestre em Educação', 'Mestre em Engenharia', 'Mestre em Farmácia', 'Mestre em Gestão da Saúde', 'Mestre em Tecnologia', 'Outro'] },
             pensamentoSuicida: { label: 'Pensamento Suicida', type: 'select', options: ['Não', 'Sim'] },
             horasEstudando: { label: 'Horas Estudando por Dia', type: 'number', min: 0, max: 24 },
             pressaoFinanceira: { label: 'Pressão Psicológica e Emocional por Dificuldades Financeiras', type: 'range', min: 0, max: 10 },
@@ -651,94 +651,269 @@
             });
         }
 
+
+
+
         validateBtn.addEventListener('click', async function() {
-            const missingFields = [];
-            const missingFieldsLabels = [];
-            
-            if (!completedFields['nome']) {
-                missingFields.push('nome');
-                missingFieldsLabels.push('Nome');
-            }
-            
-            Object.keys(fieldsData).forEach(fieldKey => {
-                if (!completedFields[fieldKey]) {
-                    missingFields.push(fieldKey);
-                    missingFieldsLabels.push(fieldsData[fieldKey].label);
-                }
+    const missingFields = [];
+    const missingFieldsLabels = [];
+    
+    if (!completedFields['nome']) {
+        missingFields.push('nome');
+        missingFieldsLabels.push('Nome');
+    }
+    
+    Object.keys(fieldsData).forEach(fieldKey => {
+        if (!completedFields[fieldKey]) {
+            missingFields.push(fieldKey);
+            missingFieldsLabels.push(fieldsData[fieldKey].label);
+        }
+    });
+
+    if (missingFields.length > 0) {
+        updateFieldSelectStyle();
+        let message = '';
+        if (missingFields.length === 1) {
+            message = `<strong>O campo "${missingFieldsLabels[0]}" precisa ser preenchido ainda.</strong>`;
+        } else {
+            message = `<strong>Os seguintes campos precisam ser preenchidos ainda:</strong><br>• ${missingFieldsLabels.join('<br>• ')}`;
+        }
+
+        validationMessage.innerHTML = `
+            <i class="fas fa-exclamation-triangle"></i>
+            ${message}
+        `;
+        validationMessage.classList.add('show');
+        
+        setTimeout(() => {
+            validationMessage.classList.remove('show');
+        }, 5000);
+    } else {
+        const formData = {
+            nome: completedFields.nome,
+            genero: completedFields.genero,
+            idade: parseInt(completedFields.idade),
+            pressaoAcademica: parseInt(completedFields.pressaoAcademica),
+            rendimentoAcademico: parseInt(completedFields.rendimentoAcademico),
+            satisfacaoEstudo: parseInt(completedFields.satisfacaoEstudo),
+            duracaoSono: parseInt(completedFields.duracaoSono),
+            habitosAlimentares: completedFields.habitosAlimentares,
+            grauAcademico: completedFields.grauAcademico,
+            pensamentoSuicida: completedFields.pensamentoSuicida,
+            horasEstudando: parseInt(completedFields.horasEstudando),
+            pressaoFinanceira: parseInt(completedFields.pressaoFinanceira),
+            historicoFamiliar: completedFields.historicoFamiliar
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/salvar-diagnostico', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
             });
+            const resultado = await response.json();
+            
+            // Salvar no localStorage
+            localStorage.setItem('formData', JSON.stringify(formData));
+            
+            validationMessage.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <strong>${resultado.message}</strong>
+            `;
+            validationMessage.style.background = 'linear-gradient(135deg, #c8e6c9, #a5d6a7)';
+            validationMessage.style.color = '#2e7d32';
+            validationMessage.style.borderLeftColor = '#4caf50';
+            validationMessage.classList.add('show');
+            
+            validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+            validateBtn.disabled = true;
+            
+            setTimeout(() => {
+                validateBtn.innerHTML = '<i class="fas fa-check-circle"></i> Diagnóstico Concluído!';
+                validateBtn.style.background = 'linear-gradient(45deg, #4caf50, #66bb6a)';
+                window.location.href = 'avaliacao.html';
+            }, 2000);
+        } catch (err) {
+            validationMessage.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Erro ao salvar os dados: ${err.message}</strong>
+            `;
+            validationMessage.classList.add('show');
+            setTimeout(() => {
+                validationMessage.classList.remove('show');
+            }, 5000);
+        }
+    }
+});
 
-            if (missingFields.length > 0) {
-                updateFieldSelectStyle();
+//         validateBtn.addEventListener('click', async function() {
+//     // Verificar se todos os campos estão preenchidos
+//     const missingFields = [];
+//     const missingFieldsLabels = [];
+    
+//     if (!completedFields['nome']) {
+//         missingFields.push('nome');
+//         missingFieldsLabels.push('Nome');
+//     }
+    
+//     Object.keys(fieldsData).forEach(fieldKey => {
+//         if (!completedFields[fieldKey]) {
+//             missingFields.push(fieldKey);
+//             missingFieldsLabels.push(fieldsData[fieldKey].label);
+//         }
+//     });
+
+//     if (missingFields.length > 0) {
+//         updateFieldSelectStyle();
+//         let message = '';
+//         if (missingFields.length === 1) {
+//             message = `<strong>O campo "${missingFieldsLabels[0]}" precisa ser preenchido ainda.</strong>`;
+//         } else {
+//             message = `<strong>Os seguintes campos precisam ser preenchidos ainda:</strong><br>• ${missingFieldsLabels.join('<br>• ')}`;
+//         }
+
+//         validationMessage.innerHTML = `
+//             <i class="fas fa-exclamation-triangle"></i>
+//             ${message}
+//         `;
+//         validationMessage.classList.add('show');
+        
+//         setTimeout(() => {
+//             validationMessage.classList.remove('show');
+//         }, 5000);
+//     } else {
+//         // Criar objeto com os dados do formulário
+//         const formData = {
+//             nome: completedFields.nome,
+//             genero: completedFields.genero,
+//             idade: parseInt(completedFields.idade),
+//             pressaoAcademica: parseInt(completedFields.pressaoAcademica),
+//             rendimentoAcademico: parseInt(completedFields.rendimentoAcademico),
+//             satisfacaoEstudo: parseInt(completedFields.satisfacaoEstudo),
+//             duracaoSono: parseInt(completedFields.duracaoSono),
+//             habitosAlimentares: completedFields.habitosAlimentares,
+//             grauAcademico: completedFields.grauAcademico,
+//             pensamentoSuicida: completedFields.pensamentoSuicida,
+//             horasEstudando: parseInt(completedFields.horasEstudando),
+//             pressaoFinanceira: parseInt(completedFields.pressaoFinanceira),
+//             historicoFamiliar: completedFields.historicoFamiliar
+//         };
+
+//         // Salvar no localStorage
+//         localStorage.setItem('formData', JSON.stringify(formData));
+
+//         // Mostrar mensagem de sucesso
+//         validationMessage.innerHTML = `
+//             <i class="fas fa-check-circle"></i>
+//             <strong>Dados salvos! Redirecionando...</strong>
+//         `;
+//         validationMessage.style.background = 'linear-gradient(135deg, #c8e6c9, #a5d6a7)';
+//         validationMessage.style.color = '#2e7d32';
+//         validationMessage.style.borderLeftColor = '#4caf50';
+//         validationMessage.classList.add('show');
+
+//         // Mudar o botão para "Processando"
+//         validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+//         validateBtn.disabled = true;
+
+//         // Redirecionar para avaliacao.html após 2 segundos
+//         setTimeout(() => {
+//             window.location.href = 'avaliacao.html';
+//         }, 2000);
+//     }
+// });
+      
+
+
+
+        // validateBtn.addEventListener('click', async function() {
+        //     const missingFields = [];
+        //     const missingFieldsLabels = [];
+            
+        //     if (!completedFields['nome']) {
+        //         missingFields.push('nome');
+        //         missingFieldsLabels.push('Nome');
+        //     }
+            
+        //     Object.keys(fieldsData).forEach(fieldKey => {
+        //         if (!completedFields[fieldKey]) {
+        //             missingFields.push(fieldKey);
+        //             missingFieldsLabels.push(fieldsData[fieldKey].label);
+        //         }
+        //     });
+
+        //     if (missingFields.length > 0) {
+        //         updateFieldSelectStyle();
                 
-                let message = '';
-                if (missingFields.length === 1) {
-                    message = `<strong>O campo "${missingFieldsLabels[0]}" precisa ser preenchido ainda.</strong>`;
-                } else {
-                    message = `<strong>Os seguintes campos precisam ser preenchidos ainda:</strong><br>• ${missingFieldsLabels.join('<br>• ')}`;
-                }
+        //         let message = '';
+        //         if (missingFields.length === 1) {
+        //             message = `<strong>O campo "${missingFieldsLabels[0]}" precisa ser preenchido ainda.</strong>`;
+        //         } else {
+        //             message = `<strong>Os seguintes campos precisam ser preenchidos ainda:</strong><br>• ${missingFieldsLabels.join('<br>• ')}`;
+        //         }
 
-                validationMessage.innerHTML = `
-                    <i class="fas fa-exclamation-triangle"></i>
-                    ${message}
-                `;
-                validationMessage.classList.add('show');
+        //         validationMessage.innerHTML = `
+        //             <i class="fas fa-exclamation-triangle"></i>
+        //             ${message}
+        //         `;
+        //         validationMessage.classList.add('show');
                 
-                setTimeout(() => {
-                    validationMessage.classList.remove('show');
-                }, 5000);
-            } else {
-                const formData = {
-                    nome: completedFields.nome,
-                    genero: completedFields.genero,
-                    idade: completedFields.idade,
-                    pressaoAcademica: completedFields.pressaoAcademica,
-                    rendimentoAcademico: completedFields.rendimentoAcademico,
-                    satisfacaoEstudo: completedFields.satisfacaoEstudo,
-                    duracaoSono: completedFields.duracaoSono,
-                    habitosAlimentares: completedFields.habitosAlimentares,
-                    grauAcademico: completedFields.grauAcademico,
-                    pensamentoSuicida: completedFields.pensamentoSuicida,
-                    horasEstudando: completedFields.horasEstudando,
-                    pressaoFinanceira: completedFields.pressaoFinanceira,
-                    historicoFamiliar: completedFields.historicoFamiliar
-                };
+        //         setTimeout(() => {
+        //             validationMessage.classList.remove('show');
+        //         }, 5000);
+        //     } else {
+        //         const formData = {
+        //             nome: completedFields.nome,
+        //             genero: completedFields.genero,
+        //             idade: completedFields.idade,
+        //             pressaoAcademica: completedFields.pressaoAcademica,
+        //             rendimentoAcademico: completedFields.rendimentoAcademico,
+        //             satisfacaoEstudo: completedFields.satisfacaoEstudo,
+        //             duracaoSono: completedFields.duracaoSono,
+        //             habitosAlimentares: completedFields.habitosAlimentares,
+        //             grauAcademico: completedFields.grauAcademico,
+        //             pensamentoSuicida: completedFields.pensamentoSuicida,
+        //             horasEstudando: completedFields.horasEstudando,
+        //             pressaoFinanceira: completedFields.pressaoFinanceira,
+        //             historicoFamiliar: completedFields.historicoFamiliar
+        //         };
 
-                try {
-                    const response = await fetch('http://localhost:5000/salvar-diagnostico', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
-                    });
-                    const resultado = await response.json();
+        //         try {
+        //             const response = await fetch('http://localhost:5000/salvar-diagnostico', {
+        //                 method: 'POST',
+        //                 headers: { 'Content-Type': 'application/json' },
+        //                 body: JSON.stringify(formData)
+        //             });
+        //             const resultado = await response.json();
                     
-                    validationMessage.innerHTML = `
-                        <i class="fas fa-check-circle"></i>
-                        <strong>${resultado.message}</strong>
-                    `;
-                    validationMessage.style.background = 'linear-gradient(135deg, #c8e6c9, #a5d6a7)';
-                    validationMessage.style.color = '#2e7d32';
-                    validationMessage.style.borderLeftColor = '#4caf50';
-                    validationMessage.classList.add('show');
+        //             validationMessage.innerHTML = `
+        //                 <i class="fas fa-check-circle"></i>
+        //                 <strong>${resultado.message}</strong>
+        //             `;
+        //             validationMessage.style.background = 'linear-gradient(135deg, #c8e6c9, #a5d6a7)';
+        //             validationMessage.style.color = '#2e7d32';
+        //             validationMessage.style.borderLeftColor = '#4caf50';
+        //             validationMessage.classList.add('show');
                     
-                    validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                    validateBtn.disabled = true;
+        //             validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+        //             validateBtn.disabled = true;
                     
-                    setTimeout(() => {
-                        validateBtn.innerHTML = '<i class="fas fa-check-circle"></i> Diagnóstico Concluído!';
-                        validateBtn.style.background = 'linear-gradient(45deg, #4caf50, #66bb6a)';
-                    }, 2000);
-                } catch (err) {
-                    validationMessage.innerHTML = `
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <strong>Erro ao salvar os dados: ${err.message}</strong>
-                    `;
-                    validationMessage.classList.add('show');
-                    setTimeout(() => {
-                        validationMessage.classList.remove('show');
-                    }, 5000);
-                }
-            }
-        });
+        //             setTimeout(() => {
+        //                 validateBtn.innerHTML = '<i class="fas fa-check-circle"></i> Diagnóstico Concluído!';
+        //                 validateBtn.style.background = 'linear-gradient(45deg, #4caf50, #66bb6a)';
+        //             }, 2000);
+        //         } catch (err) {
+        //             validationMessage.innerHTML = `
+        //                 <i class="fas fa-exclamation-triangle"></i>
+        //                 <strong>Erro ao salvar os dados: ${err.message}</strong>
+        //             `;
+        //             validationMessage.classList.add('show');
+        //             setTimeout(() => {
+        //                 validationMessage.classList.remove('show');
+        //             }, 5000);
+        //         }
+        //     }
+        // });
     </script>
 </body>
 </html>
