@@ -31,8 +31,8 @@ def get_db_connection():
             host='127.0.0.1',
             database='project_equilibrio',
             user='root',
-            password='senac',
-            port='3306'
+            password='',
+            port='3307'
         )
         logging.info("Conexão com MySQL estabelecida!")
         return connection
@@ -338,8 +338,8 @@ def getTable_graficoGenero():
                     ELSE 5
                 END;
         """)
-        row1 = cursor.fetchone()
         row2 = cursor.fetchone()
+        row1 = cursor.fetchone()
 
         masculino = {'total': row1[1], 'terapia': row1[2], 'percentual': row1[3]}
         feminino = {'total': row2[1], 'terapia': row2[2], 'percentual': row2[3]}

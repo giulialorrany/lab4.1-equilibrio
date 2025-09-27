@@ -469,26 +469,11 @@
             <div class="subtitle">Campos Críticos e Distribuição Demográfica</div>
         </div>
 
-
-        <div class="summary-stats">
-            <div class="summary-card">
-                <div class="icon"><i class="fas fa-venus-mars"></i></div>
-                <div class="value">2</div>
-                <div class="label">Categorias de Gênero</div>
-            </div>
-            
-            <div class="summary-card">
-                <div class="icon"><i class="fas fa-female"></i></div>
-                <div class="value">34.7%</div>
-                <div class="label">Maior Taxa (Feminino)</div>
-            </div>
-        </div>
-
         <div class="main-content">
             <div class="chart-section">
                 <h2 class="section-title">
                     <i class="fas fa-chart-pie icon"></i>
-                    Distribuição por Gênero
+                    Distribuição de Gênero pra Terapia
                 </h2>
                 <canvas id="genderChart" class="chart-canvas"></canvas>
             </div>
@@ -534,8 +519,8 @@
             
             const labels = ['Masculino', 'Feminino'];
             const therapyData = [
-                genderData.masculino.terapia,
-                genderData.feminino.terapia
+                genderData.feminino.terapia,
+                genderData.masculino.terapia
             ];
 
             new Chart(ctx, {
@@ -611,12 +596,12 @@
             
             const labels = ['Masculino', 'Feminino'];
             const totalData = [
-                genderData.masculino.total,
-                genderData.feminino.total
+                genderData.feminino.total,
+                genderData.masculino.total
             ];
             const therapyData = [
-                genderData.masculino.terapia,
-                genderData.feminino.terapia
+                genderData.feminino.terapia,
+                genderData.masculino.terapia
             ];
 
             new Chart(ctx, {
@@ -723,15 +708,15 @@
             const stats = [
                 {
                     gender: 'Masculino',
-                    total: genderData.masculino.total,
-                    terapia: genderData.masculino.terapia,
-                    percentual: genderData.masculino.percentual
-                },
-                {
-                    gender: 'Feminino',
                     total: genderData.feminino.total,
                     terapia: genderData.feminino.terapia,
                     percentual: genderData.feminino.percentual
+                },
+                {
+                    gender: 'Feminino',
+                    total: genderData.masculino.total,
+                    terapia: genderData.masculino.terapia,
+                    percentual: genderData.masculino.percentual
                 }
             ];
 

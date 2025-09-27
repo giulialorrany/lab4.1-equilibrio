@@ -3,9 +3,9 @@ com o resultado baseado em dados reais como justificativa pra avaliação
 
 -LINK DO PROJETO NO GITHUB: https://github.com/giulialorrany/lab4.1-equilibrio
 
-
-
-
+-COMPONENTES
+    Carlos Eduardo Costa da Silva
+    Giulia Lorrany Canabarro dos Santos
 
 
 
@@ -25,9 +25,9 @@ pip install mysql-connector-python
 }
 
 #APRIMORAMENTO QUE AGUARDA O PROJETO
-{ 
--conectar ela ao disgnostico para ser usada como exemplo possibilitando a avaliação
--conectar página avaliacao.html
+{
+-conectar ela ao disgnostico para ser usada como exemplo possibilitando a avaliação = ok
+-conectar página avaliacao.html = ok
 }
 
 
